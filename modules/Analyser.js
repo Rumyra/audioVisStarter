@@ -34,6 +34,7 @@ class Analyser {
         .then(stream => this.audio_ctx.createMediaStreamSource(stream))
         .then(source => {
           source.connect(this.analyser_node);
+          return source;
         });
     } else {
       
@@ -41,6 +42,7 @@ class Analyser {
         resolve(this.audio_ctx.createMediaElementSource(this.track));
       }).then(source => {
           source.connect(this.analyser_node).connect(this.audio_ctx.destination);
+          return source;
       });
       
     } 
