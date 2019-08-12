@@ -17,8 +17,8 @@ for (let i=0; i<elAmount; i++) {
 // get those elements
 const allEls = visEl.querySelectorAll('i');
 
-// create a new vis -> pass in bin size and if you're using soundcloud you can pass in a track id here
-const vis = new Vis(binSize);
+// create a new vis -> pass in bin size & if you want to use a strack from soundcloud pass in an id (as a string) here: new Vis(binSize, '433074246')
+const vis = new Vis(binSize, '433074246');
 
 // setup our draw loop: THIS IS WHERE THE MAGIC HAPPENS!!
 vis.draw( () => {

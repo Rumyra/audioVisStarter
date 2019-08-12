@@ -4,7 +4,7 @@ import Analyser from './Analyser.js';
 class Vis extends Analyser {
 	
 	constructor(size, trackid) {
-		super(size);
+		super(size, trackid);
 		this.raf = 1;
 	}
 	
@@ -39,7 +39,6 @@ class Vis extends Analyser {
 	
 	draw(fn) {
 		this.drawFunction = fn
-    console.log("hi")
 	}
 }
 

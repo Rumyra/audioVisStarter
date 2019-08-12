@@ -2,24 +2,23 @@
 // TODO switch source method
 class Analyser {
   
-  constructor(dataSize = 512, trackID = '433074246') {
+  // set id to null & if it's set on instigation run soundcloud not local
+  constructor(dataSize = 512, trackID = null) {
     this.audio_ctx = new AudioContext();
 
-    this.useMic = false;
-    this.source = this._getSource();
-		
-		this.dataSize = dataSize;
-    this.data = new Uint8Array(this.dataSize);
-		this.frequencies = [];
-    
-    
-
     this.track_id = trackID;
-    this.track = new Audio('/beast.mp3');
-    this.track.crossOrigin = 'anonymous';
+    console.log(this.track_id);
+    this.track = this._createTrack();
 
+    this.useMic = true;
+    
+    this.dataSize = dataSize;
+    this.data = new Uint8Array(this.dataSize);
+    this.frequencies = [];
+    
     this.analyser_node = this._createAnalyserNode();
 
+    this.source = this._getSource();
 
   }
 
@@ -38,12 +37,10 @@ class Analyser {
         });
     } else {
       
-        // let source = this.audio_ctx.createMediaElementSource(this.track)
-        console.log(this.track);
       return new Promise((resolve, reject) => {
-        this.audio_ctx.createMediaElementSource(this.track);
+        resolve(this.audio_ctx.createMediaElementSource(this.track));
       }).then(source => {
-          source.connect(this.analyser_node);
+          source.connect(this.analyser_node).connect(this.audio_ctx.destination);
       });
       
     } 
@@ -64,22 +61,18 @@ class Analyser {
     this.analyser_node.getByteFrequencyData(this.data);
   }
 
-  _createSoundcloudTrack() {
-    this.client_id = 'z8LRYFPM4UK5MMLaBe9vixfph5kqNA25';
-    this.track.src = `https://api.soundcloud.com/tracks/${this.track_id}/stream?client_id=${this.client_id}`;
-    this.track.crossOrigin = 'anonymous';
+  _createTrack() {
+    this.audio = new Audio(this.source);
+    this.audio.crossOrigin = "anonymous";
+    // track id is null use local track
+    if (this.track_id === null) {
+      this.audio.src = '/beast.mp3';
+    } else { // use sound cloud
+      this.client_id = 'z8LRYFPM4UK5MMLaBe9vixfph5kqNA25';
+      this.audio.src = `https://api.soundcloud.com/tracks/${this.track_id}/stream?client_id=${this.client_id}`;
+    }
+    return this.audio;
   }
-
-  _createLocalTrack() {
-    this.track.src = '/beast.mp3';
-    this.track.crossOrigin = 'anonymous';
-  }
-
-  // _createTrack() {
-  //   this.audio = new Audio(this.source);
-  //   this.audio.crossOrigin = "anonymous";
-  //   return this.audio;
-  // }
   
   run() {
 		// check if context is in suspended state (autoplay policy)
