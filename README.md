@@ -11,6 +11,15 @@ Starters
 Audio Vis Starter Project {#audiovisstarterproject}
 =========================
 
+Run from a server:
+
+`python -m SimpleHTTPServer 8000`
+
+or
+
+`npm install -g http-server`
+`http-server`
+
 Well hello there! Welcome to the audio visualisation starter project!
 Allow me to run you through it.
 
