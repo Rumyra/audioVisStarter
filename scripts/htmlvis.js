@@ -23,6 +23,36 @@ const allEls = visEl.querySelectorAll('i');
 // new Vis(binSize, '433074246');
 const vis = new Vis(binSize);
 
+let btnOn = false;
+
+navigator.requestMIDIAccess({ sysex: false })
+  .then(function(access) {
+
+     // Get lists of available MIDI controllers
+     const inputs = Array.from(access.inputs.values());
+     //const outputs = Array.from(access.outputs.values());
+
+	 if(inputs.length) {
+		inputs[0].onmidimessage = function (message) {
+			const data = message.data; // this gives us our [command/channel, note, velocity] data.
+			console.log('MIDI data in', data); // MIDI data [144, 63, 73]
+			
+			if(data[1] === 53) {
+				if(data[0] === 144) {
+					btnOn = true;
+				}else if (data[0] === 128) {
+					btnOn = false;
+					console.log('up')
+				}
+			}
+		 }
+	 }
+     
+  })
+  .catch((err) =>{
+	  console.log('error connecting to midi', err);
+  })
+
 // setup our draw loop: THIS IS WHERE THE MAGIC HAPPENS!!
 vis.draw( () => {
 
@@ -31,6 +61,11 @@ vis.draw( () => {
 		allEls[i].style.width = (f+10)+'px';
 		allEls[i].style.backgroundColor = `hsla(${i*5}, 50%, 50%, 1)`;
 	})
+	if(btnOn) {
+		visEl.style.backgroundColor = 'yellow';
+	}else {
+		visEl.style.backgroundColor = 'white';
+	}
 	
 } )
 
