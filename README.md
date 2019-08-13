@@ -1,4 +1,4 @@
-Audio Visulisation Starter
+Audio Visualisation Starter
 ==========================
 
 Starters
