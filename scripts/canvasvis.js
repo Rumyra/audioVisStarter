@@ -41,18 +41,18 @@ ctx.lineJoin = 'round';
 const binSize = 128;
 const elAmount = Math.floor(binSize/3); // Returned frequncies is a third
 
-// create a new vis -> pass in bin size and if you're using soundcloud you can pass in a track id here
-const vis = new Vis(binSize);
+// create a new vis
+const vis = new Vis(binSize, '/beast.mp3');
 
 // setup our draw loop: THIS IS WHERE THE MAGIC HAPPENS!!
 vis.draw( () => {
 
 	ctx.clearRect(0, 0, screenDim.width, screenDim.height);
-	// instead of looping over our frequencies - let's loop over our paths, but _use_ our frequency vals
+	// loop over our frequencies and draw a shape for each one
 	vis.frequencies.forEach((f, i) => {
 		ctx.beginPath();
 		ctx.fillStyle = 'red';
-		ctx.arc(i*10, i*10, f, 0, 5);
+		ctx.arc(i*20, i*20, f, 0, 5);
 		ctx.fill();
 		ctx.closePath();
 	})
@@ -71,18 +71,6 @@ controls.querySelector('[data-control="play"]').addEventListener('click', functi
 	} else {
     this.dataset.on = "false";
     vis.stop();
-	}
-   
-})
-
-// if toggle
-// change audioData source
-controls.querySelector('[data-control="input"]').addEventListener('click', function(e) {
-
-	if (this.dataset.toggle === 'mic') {
-		this.dataset.toggle = "music";
-	} else {
-    this.dataset.toggle = "mic";
 	}
    
 })

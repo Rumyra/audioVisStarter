@@ -6,11 +6,13 @@ class Analyser {
   constructor(dataSize = 512, trackID = null) {
     this.audio_ctx = new AudioContext();
 
+    this.useMic = false;
     this.track_id = trackID;
-    console.log(this.track_id);
-    this.track = this._createTrack();
-
-    this.useMic = true;
+    if (this.track_id === null) {
+      this.useMic = true
+    } else {
+      this.track = this._createTrack();
+    }
     
     this.dataSize = dataSize;
     this.data = new Uint8Array(this.dataSize);
@@ -34,6 +36,7 @@ class Analyser {
         .then(stream => this.audio_ctx.createMediaStreamSource(stream))
         .then(source => {
           source.connect(this.analyser_node);
+          return source;
         });
     } else {
       
@@ -41,6 +44,7 @@ class Analyser {
         resolve(this.audio_ctx.createMediaElementSource(this.track));
       }).then(source => {
           source.connect(this.analyser_node).connect(this.audio_ctx.destination);
+          return source;
       });
       
     } 
@@ -65,7 +69,7 @@ class Analyser {
     this.audio = new Audio(this.source);
     this.audio.crossOrigin = "anonymous";
     // track id is null use local track
-    if (this.track_id === null) {
+    if (this.track_id === '/beast.mp3') {
       this.audio.src = '/beast.mp3';
     } else { // use sound cloud
       this.client_id = 'z8LRYFPM4UK5MMLaBe9vixfph5kqNA25';
