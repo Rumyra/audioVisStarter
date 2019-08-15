@@ -31,7 +31,7 @@ navigator.requestMIDIAccess({ sysex: false })
      //const outputs = Array.from(access.outputs.values());
 
 	 if(inputs.length) {
-		inputs[0].onmidimessage = function (message) {
+		inputs[inputs.length - 1].onmidimessage = function (message) {
 			const data = message.data; // this gives us our [command/channel, note, velocity] data.
 			console.log('MIDI data in', data); // MIDI data [144, 63, 73]
 			
@@ -103,7 +103,7 @@ vis.draw( () => {
 		// console.log(p.id);
 
 		visEl.style.transform = `rotate(${cc1 * 2.9}deg)`;
-		visEl.style.width = `${cc2 * 0.9}%`;
+		visEl.style.width = `${cc2 * 0.8}%`;
 	})
 	
 } )
